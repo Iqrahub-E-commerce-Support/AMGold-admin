@@ -3,9 +3,13 @@ import React from 'react'
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CategoryIcon from '@mui/icons-material/Category';
+import CheckroomIcon from '@mui/icons-material/Checkroom';
 import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -73,6 +77,7 @@ const StyledToolbar = styled(Toolbar)({
     }),
   );
 const AdminSidebar = () => {
+  const navigate = useNavigate()
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
@@ -128,7 +133,7 @@ const AdminSidebar = () => {
 
         <List>
         <ListItem 
-        // onClick={()=>{navigate("/admin_dashboard")}}
+        onClick={()=>{navigate("/admin_dashboard")}}
          disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -144,7 +149,7 @@ const AdminSidebar = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {/* <DashboardIcon /> */}
+                 <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -153,7 +158,7 @@ const AdminSidebar = () => {
 
         <List>
         <ListItem 
-        // onClick={()=>{navigate("/admin_doctors")}}
+        onClick={()=>{navigate("/collection")}}
           disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -169,16 +174,16 @@ const AdminSidebar = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {/* <LocalHospitalIcon /> */}
+                 <CategoryIcon />
                 </ListItemIcon>
-                <ListItemText primary="Doctors" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Collections" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
         </List>
 
         <List>
         <ListItem 
-        // onClick={()=>{navigate("/admin_new_doctor")}}
+        onClick={()=>{navigate("/product")}}
            disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -194,9 +199,9 @@ const AdminSidebar = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {/* <PersonAddIcon /> */}
+                 <CheckroomIcon />
                 </ListItemIcon>
-                <ListItemText primary="New Doctors" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Products" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
         </List>
