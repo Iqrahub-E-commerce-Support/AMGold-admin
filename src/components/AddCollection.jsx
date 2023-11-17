@@ -34,9 +34,14 @@ const StyledModal = styled(Modal)({
 
 const AddCollection = () => {
   const [open, setOpen] = useState(false);
+  const [makeOpen, setMakeOpen] = useState(false);
   const [collection, setCollection] = useState([]);
   const modalHandler = () => {
     setOpen(true);
+  };
+  const modalHandlerMakingCharge = (id) => {
+    setMakeOpen(true);
+    MakingChargeformik.setFieldValue('id', id);
   };
   const getCollection = async () => {
     try {
@@ -72,6 +77,28 @@ const AddCollection = () => {
         }
         console.log("form data", formData);
         const response = await axios.post("/addCollection", formData, {});
+        if (response.data.success) {
+          // toast.success(response.data.message);
+          getCollection();
+        } else {
+          // toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        helpers.setErrors({ submit: error.message });
+        // toast.error("Please login");
+      }
+    },
+  });
+  const MakingChargeformik = useFormik({
+    initialValues: {
+      charge:0,
+    },
+    // validationSchema: CollectionSchema,
+    onSubmit: async (values, helpers) => {
+      try {
+        
+        const response = await axios.post("/updateMakingCharge", {values});
         if (response.data.success) {
           // toast.success(response.data.message);
           getCollection();
@@ -151,7 +178,6 @@ const AddCollection = () => {
                   // helperText={formik.errors.sessions}
                   onChange={formik.handleChange}
                 />
-                <Typography sx={{ mb: 1, mt: 2 }}>Enter the picture</Typography>
                 <TextField
                   focused
                   required
@@ -220,8 +246,10 @@ const AddCollection = () => {
                         <TableCell>Title</TableCell>
                         <TableCell>image</TableCell>
                         <TableCell>products</TableCell>
+                        <TableCell>Making Charge</TableCell>
                         <TableCell>Status</TableCell>
                         <TableCell>Action</TableCell>
+                        <TableCell>Update making charge(%)</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -243,11 +271,12 @@ const AddCollection = () => {
                               />
                             </TableCell>
                             <TableCell>{/* {value?.phone} */}</TableCell>
+                            <TableCell>{value?.makingCharge} </TableCell>
                             <TableCell>
                               <Box
                                 sx={{
                                   backgroundColor: "#6bff93",
-                                  width: "40%",
+                                  width: "80%",
                                   borderRadius: 1,
                                 }}
                               >
@@ -274,6 +303,77 @@ const AddCollection = () => {
                                   Unblock
                                 </Button>
                               )}
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                 onClick={() => modalHandlerMakingCharge(value._id)}
+                                variant="contained"
+                                sx={{
+                                  backgroundColor: "white",
+                                  color: "#FF90AB",
+                                }}
+                              >
+                                Add making charge
+                              </Button>
+                              <StyledModal
+                                open={makeOpen}
+                                onClose={(e) => setMakeOpen(false)}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                              >
+                                <Box
+                                  width={450}
+                                  height={250}
+                                  bgcolor={"background.default"}
+                                  color={"text.primary"}
+                                  p={3}
+                                  borderRadius={5}
+                                >
+                                  <Typography
+                                    variant="h6"
+                                    color="gray"
+                                    textAlign="center"
+                                    marginBottom={3}
+                                  >
+                                    Add making charge in percentage
+                                  </Typography>
+
+                                  <TextField
+                                    type="number"
+                                    fullWidth
+                                    name="charge"
+                                    margin="normal"
+                                    size="small"
+                                    sx={{ backgroundColor: "white" }}
+                                    label="Enter the Pricing"
+                                    variant="outlined"
+                                    value={MakingChargeformik.values.charge}
+                                    error={MakingChargeformik.errors.charge}
+                                    helperText={MakingChargeformik.errors.charge}
+                                    onChange={MakingChargeformik.handleChange}
+                                  />
+                                  <Box
+                                    display={"flex"}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                    marginTop={3}
+                                  >
+                                    <Button
+                                      variant="contained"
+                                      color="inherit"
+                                      type="submit"
+                                      name="submit"
+                                      onClick={
+                                        MakingChargeformik.handleSubmit
+
+                                        // setOpen(false);
+                                      }
+                                    >
+                                      Submit
+                                    </Button>
+                                  </Box>
+                                </Box>
+                              </StyledModal>
                             </TableCell>
                           </TableRow>
                         ))}

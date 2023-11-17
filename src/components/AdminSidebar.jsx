@@ -108,7 +108,7 @@ const AdminSidebar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            ProCare
+            AlMuqtadir Admin Panel
           </Typography>
           </Box>
           <Box sx={{display:'flex',justifyContent:"end",alignItems:"center"}}>
@@ -133,7 +133,7 @@ const AdminSidebar = () => {
 
         <List>
         <ListItem 
-        onClick={()=>{navigate("/admin_dashboard")}}
+        onClick={()=>{navigate("/dashboard")}}
          disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{

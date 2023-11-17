@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminSidebar from './AdminSidebar'
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled } from '@mui/material'
+import GoldPriceChangerComponent from './GoldPriceChangerComponent';
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -18,7 +19,12 @@ const Dashboard = () => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
        
-       
+       <Box>
+        <Typography sx={{fontWeight:600,fontSize:22}}> Dashboard</Typography>
+       </Box>
+        <Box sx={{mt:4}}>
+        <GoldPriceChangerComponent/>
+        </Box>
       </Box>
       </Box> 
     </>
