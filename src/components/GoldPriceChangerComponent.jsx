@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { PriceSchema } from "../validation/PriceSchema";
 import axios from '../axios/axios'
+import toast from "react-hot-toast";
 const StyledModal = styled(Modal)({
   display: "flex",
   alignItems: "center",
@@ -20,7 +21,7 @@ const GoldPriceChangerComponent = () => {
     try {
       const response = await axios.get("/getgoldPrice", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
+          Authorization: `Bearer ${localStorage.getItem("admintoken")}`,
         },
       });
       if (response.data.success) {
@@ -43,16 +44,16 @@ const GoldPriceChangerComponent = () => {
       try {
         const response = await axios.post("/updateGoldPrice",{values,});
         if (response.data.success) {
-          // toast.success(response.data.message);
+          toast.success(response.data.message);
 
           getGoldPrice();
         } else {
-          // toast.error(response.data.message);
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.log(error);
         helpers.setErrors({ submit: error.message });
-        // toast.error("Please login");
+        toast.error("Please login");
       }
     },
   });

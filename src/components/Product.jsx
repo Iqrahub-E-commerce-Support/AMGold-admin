@@ -22,6 +22,8 @@ import AdminSidebar from "./AdminSidebar";
 import axios from "../axios/axios";
 import { useFormik } from "formik";
 import { ProductSchema } from "../validation/productschema";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -37,9 +39,15 @@ const StyledModal = styled(Modal)({
 });
 
 const Product = () => {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [collection, setCollection] = useState([]);
   const [product, setProduct] = useState([]);
+  useEffect(()=>{
+    if(!localStorage.getItem('admintoken')){
+      navigate('/login')
+    }
+  })
   const getProducts = async () => {
     try {
       const response = await axios.get("/getAllProducts", {
@@ -100,15 +108,15 @@ const Product = () => {
         console.log("form data", formData);
         const response = await axios.post("/addProducts", formData, { values });
         if (response.data.success) {
-          // toast.success(response.data.message);
+          toast.success(response.data.message);
           getProducts();
         } else {
-          // toast.error(response.data.message);
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.log(error);
         helpers.setErrors({ submit: error.message });
-        // toast.error("Please login");
+        toast.error("Please login");
       }
     },
   });
@@ -141,7 +149,7 @@ const Product = () => {
               >
                 <Box
                   width={450}
-                  height={560}
+                  height={630}
                   bgcolor={"background.default"}
                   color={"text.primary"}
                   p={3}

@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AdminSidebar from './AdminSidebar'
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled } from '@mui/material'
 import GoldPriceChangerComponent from './GoldPriceChangerComponent';
+import { useNavigate } from 'react-router-dom';
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -11,6 +12,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
   }));
 const Dashboard = () => {
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if(!localStorage.getItem('admintoken')){
+      navigate('/login')
+    }
+  })
   return (
     <>
      <Box sx={{ display: 'flex' }}>

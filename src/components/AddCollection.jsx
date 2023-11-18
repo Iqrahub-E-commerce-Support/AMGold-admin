@@ -18,6 +18,8 @@ import AdminSidebar from "./AdminSidebar";
 import { useFormik } from "formik";
 import axios from "../axios/axios";
 import { CollectionSchema } from "../validation/collectionschema";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -33,9 +35,15 @@ const StyledModal = styled(Modal)({
 });
 
 const AddCollection = () => {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [makeOpen, setMakeOpen] = useState(false);
   const [collection, setCollection] = useState([]);
+  useEffect(()=>{
+    if(!localStorage.getItem('admintoken')){
+      navigate('/login')
+    }
+  })
   const modalHandler = () => {
     setOpen(true);
   };
@@ -47,7 +55,7 @@ const AddCollection = () => {
     try {
       const response = await axios.get("/getCollection", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
+          Authorization: `Bearer ${localStorage.getItem("admintoken")}`,
         },
       });
       if (response.data.success) {
@@ -78,15 +86,15 @@ const AddCollection = () => {
         console.log("form data", formData);
         const response = await axios.post("/addCollection", formData, {});
         if (response.data.success) {
-          // toast.success(response.data.message);
+          toast.success(response.data.message);
           getCollection();
         } else {
-          // toast.error(response.data.message);
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.log(error);
         helpers.setErrors({ submit: error.message });
-        // toast.error("Please login");
+        toast.error("Please login");
       }
     },
   });
@@ -100,15 +108,15 @@ const AddCollection = () => {
         
         const response = await axios.post("/updateMakingCharge", {values});
         if (response.data.success) {
-          // toast.success(response.data.message);
+          toast.success(response.data.message);
           getCollection();
         } else {
-          // toast.error(response.data.message);
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.log(error);
         helpers.setErrors({ submit: error.message });
-        // toast.error("Please login");
+        toast.error("Please login");
       }
     },
   });
@@ -174,8 +182,6 @@ const AddCollection = () => {
                   label="Description"
                   variant="outlined"
                   value={formik.values.description}
-                  // error={formik.errors.sessions}
-                  // helperText={formik.errors.sessions}
                   onChange={formik.handleChange}
                 />
                 <TextField
@@ -195,20 +201,6 @@ const AddCollection = () => {
                   label="upload your Images"
                   variant="outlined"
                 />
-                {/* <TextField
-                    type="number"
-                    fullWidth
-                    name="price"
-                    margin="normal"
-                    size="small"
-                    sx={{ backgroundColor: "white" }}
-                    label="Enter the Pricing"
-                    variant="outlined"
-                    value={formik.values.price}
-                    error={formik.errors.price}
-                    helperText={formik.errors.price}
-                    onChange={formik.handleChange}
-                  /> */}
                 <Box
                   display={"flex"}
                   justifyContent={"center"}
@@ -256,7 +248,7 @@ const AddCollection = () => {
                       {collection &&
                         collection.map((value) => (
                           <TableRow
-                          // key={value._id}
+                          key={value._id}
                           >
                             <TableCell>{value.title}</TableCell>
                             <TableCell>

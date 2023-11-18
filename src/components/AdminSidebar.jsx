@@ -133,7 +133,7 @@ const AdminSidebar = () => {
 
         <List>
         <ListItem 
-        onClick={()=>{navigate("/dashboard")}}
+        onClick={()=>{navigate("/")}}
          disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
