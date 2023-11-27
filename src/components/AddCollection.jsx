@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
 import { useFormik } from "formik";
 import axios from "../axios/axios";
-import { CollectionSchema } from "../validation/collectionschema";
+import { Collection} from "../validation/CollectionSchema";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -74,7 +74,7 @@ const AddCollection = () => {
       description: "",
       file: null,
     },
-    validationSchema: CollectionSchema,
+    validationSchema: Collection,
     onSubmit: async (values, helpers) => {
       try {
         const formData = new FormData();

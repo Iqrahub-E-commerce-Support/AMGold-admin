@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import AdminSidebar from './AdminSidebar'
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled } from '@mui/material'
+import { Box, Typography, styled } from '@mui/material'
 import GoldPriceChangerComponent from './GoldPriceChangerComponent';
 import { useNavigate } from 'react-router-dom';
 const DrawerHeader = styled('div')(({ theme }) => ({
