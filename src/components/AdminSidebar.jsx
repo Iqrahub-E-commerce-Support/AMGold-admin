@@ -1,9 +1,10 @@
-import { Badge, Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, styled } from '@mui/material'
+import {Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, styled } from '@mui/material'
 import React from 'react'
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CategoryIcon from '@mui/icons-material/Category';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import { useTheme } from '@emotion/react';
@@ -85,6 +86,10 @@ const AdminSidebar = () => {
       };
       const handleDrawerClose = () => {
         setOpen(false);
+      };
+      const handleLogout = () => {
+        localStorage.removeItem('admintoken');
+        navigate("/login")
       };
   return (
     <>
@@ -206,7 +211,7 @@ const AdminSidebar = () => {
             </ListItem>
         </List>
 
-        <List>
+        {/* <List>
         <ListItem 
         // onClick={()=>{navigate("/admin_users")}}
           disablePadding sx={{ display: 'block' }}>
@@ -225,13 +230,13 @@ const AdminSidebar = () => {
                   }}
                 >
                  {/* <PersonIcon /> */}
-                </ListItemIcon>
-                <ListItemText primary="Users" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-        </List>
+                {/* </ListItemIcon> */}
+                {/* <ListItemText primary="Users" sx={{ opacity: open ? 1 : 0 }} /> */}
+              {/* </ListItemButton> */}
+            {/* </ListItem> */}
+        {/* </List> */} 
 
-        <List>
+        {/* <List>
         <ListItem 
         // onClick={()=>{navigate("/admin_pricing")}}
           disablePadding sx={{ display: 'block' }}>
@@ -250,13 +255,13 @@ const AdminSidebar = () => {
                   }}
                 >
                  {/* <PriceChangeIcon /> */}
-                </ListItemIcon>
-                <ListItemText primary="Plans" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-        </List>
+                {/* </ListItemIcon> */}
+                {/* <ListItemText primary="Plans" sx={{ opacity: open ? 1 : 0 }} /> */}
+              {/* </ListItemButton> */}
+            {/* </ListItem> */}
+        {/* </List> */}
 
-        <List>
+        {/* <List>
         <ListItem 
         // onClick={()=>{navigate("/admin_Appointment_page")}}
           disablePadding sx={{ display: 'block' }}>
@@ -275,14 +280,14 @@ const AdminSidebar = () => {
                   }}
                 >
                  {/* <DateRangeIcon /> */}
-                </ListItemIcon>
+                {/* </ListItemIcon>
                 <ListItemText primary="Appointments" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-        </List>
+              </ListItemButton> */}
+            {/* </ListItem> */}
+        {/* </List> */} 
         <List>
         <ListItem 
-        // onClick={handleLogout}
+        onClick={handleLogout}
           disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -298,9 +303,9 @@ const AdminSidebar = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {/* <LogoutIcon /> */}
+                 <ExitToAppIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Appointments" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
         </List>
