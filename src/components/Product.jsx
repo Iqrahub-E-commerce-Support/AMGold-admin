@@ -85,9 +85,11 @@ const Product = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
+      description:"",
       category: null,
       weight: null,
-      stoneWeight: null,
+      stoneWeight: 0,
+      stonePrice:0,
       file: null,
       productType:''
     },
@@ -116,7 +118,7 @@ const Product = () => {
       } catch (error) {
         console.log(error);
         helpers.setErrors({ submit: error.message });
-        toast.error("Please login");
+        toast.error("Something went wrong");
       }
     },
   });
