@@ -345,7 +345,7 @@ const Product = () => {
                         <TableCell> {value.name} </TableCell>
                         <TableCell>
                           <img
-                            src={value.images}
+                            src={value.images[0]}
                             alt=""
                             style={{
                               objectFit: "cover",
