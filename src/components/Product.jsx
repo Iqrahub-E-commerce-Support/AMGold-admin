@@ -89,6 +89,7 @@ const Product = () => {
       description:"",
       category: null,
       weight: null,
+      stock: null,
       stoneWeight: 0,
       stonePrice:0,
       file: null,
@@ -102,6 +103,7 @@ const Product = () => {
         formData.append("description", values.description);
         formData.append("category", values.category);
         formData.append("weight", values.weight);
+        formData.append("stock", values.stock);
         formData.append("stoneWeight", values.stoneWeight);
         formData.append("stonePrice", values.stonePrice);
         formData.append("productType", values.productType);
@@ -271,6 +273,20 @@ const Product = () => {
                     value={formik.values.weight}
                     error={formik.errors.weight}
                     helperText={formik.errors.weight}
+                    onChange={formik.handleChange}
+                  />
+                  <TextField
+                    type="number"
+                    name="stock"
+                    fullWidth
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="Number of Stock"
+                    variant="outlined"
+                    value={formik.values.stock}
+                    error={formik.errors.stock}
+                    helperText={formik.errors.stock}
                     onChange={formik.handleChange}
                   />
                   <TextField
