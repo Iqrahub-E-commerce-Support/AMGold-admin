@@ -225,6 +225,54 @@ const Product = () => {
       toast.error("something went wrong");
     }
   };
+  const BlockHandler =  async (ProductId)=>{
+    try {
+      const response = await axios.post(
+        "/Blockproduct",
+        {
+          ProductId: ProductId
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("admintoken"),
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getProducts()
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  }
+  const unBlockHadler = async (productId)=>{
+    try {
+      const response = await axios.post(
+        "/unblockProduct",
+        {
+          productId: productId
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("admintoken"),
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getProducts()
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  }
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -667,9 +715,11 @@ const Product = () => {
                               <TableCell>
                                 <Box
                                   sx={{
-                                    backgroundColor: "#6bff93",
-                                    width: "90%",
+                                    backgroundColor: value.isActive === "Active" ? "#6bff93" : "#fcb8b8",
+                                    width: "95%",
                                     borderRadius: 1,
+                                    px:0.5,
+                                    py:0.3
                                   }}
                                 >
                                   <Typography textAlign={"center"}>
@@ -682,7 +732,7 @@ const Product = () => {
                                   <Button
                                     variant="contained"
                                     color="error"
-                                    // onClick={()=>BlockHandler(value._id)}
+                                    onClick={()=>BlockHandler(value._id)}
                                   >
                                     Block
                                   </Button>
@@ -690,7 +740,7 @@ const Product = () => {
                                   <Button
                                     variant="contained"
                                     color="success"
-                                    // onClick={()=>unBlockHadler(value._id)}
+                                    onClick={()=>unBlockHadler(value._id)}
                                   >
                                     Unblock
                                   </Button>
