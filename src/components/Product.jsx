@@ -24,7 +24,8 @@ import { useFormik } from "formik";
 import { ProductSchema } from "../validation/productschema";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -40,15 +41,17 @@ const StyledModal = styled(Modal)({
 });
 
 const Product = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [editopen, setEditopen] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
   const [collection, setCollection] = useState([]);
   const [product, setProduct] = useState([]);
-  useEffect(()=>{
-    if(!localStorage.getItem('admintoken')){
-      navigate('/login')
+  useEffect(() => {
+    if (!localStorage.getItem("admintoken")) {
+      navigate("/login");
     }
-  })
+  });
   const getProducts = async () => {
     try {
       const response = await axios.get("/getAllProducts", {
@@ -58,7 +61,6 @@ const Product = () => {
       });
       if (response.data.success) {
         setProduct(response.data.data);
-
       }
     } catch (error) {
       console.log(error);
@@ -77,7 +79,6 @@ const Product = () => {
       if (response.data.success) {
         const collection = response.data.data.map((item) => item);
         setCollection(collection);
-
       }
     } catch (error) {
       console.log(error);
@@ -86,14 +87,14 @@ const Product = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      description:"",
+      description: "",
       category: null,
       weight: null,
       stock: null,
       stoneWeight: 0,
-      stonePrice:0,
+      stonePrice: 0,
       file: null,
-      productType:''
+      productType: "",
     },
     validationSchema: ProductSchema,
     onSubmit: async (values, helpers) => {
@@ -110,7 +111,6 @@ const Product = () => {
         for (let i = 0; i < values.file.length; i++) {
           formData.append("file", values.file[i]);
         }
-        console.log("form data", formData);
         const response = await axios.post("/addProducts", formData, { values });
         if (response.data.success) {
           toast.success(response.data.message);
@@ -119,7 +119,78 @@ const Product = () => {
           toast.error(response.data.message);
         }
       } catch (error) {
-        console.log(error);
+        helpers.setErrors({ submit: error.message });
+        toast.error("Something went wrong");
+      }
+    },
+  });
+  const editmodalHandler = async (productId) => {
+    try {
+      const response = await axios.get("/getSpecificProduct", {
+        params: { productId },
+      });
+
+      if (response.data.success) {
+        const productData = response.data.data;
+        setEditProduct(productData);
+        setEditopen(true);
+        getCollection();
+        const initialValues = {
+          name: productData.name,
+          description: productData.description,
+          category: productData.collectionref,
+          weight: productData.weight,
+          stock: productData.stock,
+          stoneWeight: productData ? productData.stoneWeight : 0,
+          stonePrice: productData ? productData.stonePrice : 0,
+          file: null,
+          productType: productData.productType,
+        };
+        editFormik.setValues(initialValues);
+      } else {
+        console.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const editFormik = useFormik({
+    initialValues: {
+      name: "",
+      description: "",
+      category: null,
+      weight: null,
+      stock: null,
+      stoneWeight: 0,
+      stonePrice: 0,
+      file: null,
+      productType: "",
+    },
+    validationSchema: ProductSchema,
+    onSubmit: async (values, helpers) => {
+      try {
+        const formData = new FormData();
+        formData.append("productId", editProduct._id);
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        formData.append("category", values.category);
+        formData.append("weight", values.weight);
+        formData.append("stock", values.stock);
+        formData.append("stoneWeight", values.stoneWeight);
+        formData.append("stonePrice", values.stonePrice);
+        formData.append("productType", values.productType);
+        for (let i = 0; i < values.file?.length; i++) {
+          formData.append("file", values.file[i]);
+        }
+        const response = await axios.post("/editProduct", formData, { values });
+        if (response.data.success) {
+          toast.success(response.data.message);
+          getProducts();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
         helpers.setErrors({ submit: error.message });
         toast.error("Something went wrong");
       }
@@ -129,12 +200,13 @@ const Product = () => {
     setOpen(true);
     getCollection();
   };
-  const DeleteHandler = async (id)=>{
+
+  const DeleteHandler = async (id) => {
     try {
       const response = await axios.post(
         "deleteProduct",
         {
-          id
+          id,
         },
         {
           headers: {
@@ -144,16 +216,15 @@ const Product = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message);
-        getProducts()
+        getProducts();
         // setRefresh(!refresh);
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
       toast.error("something went wrong");
     }
-  }
+  };
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -179,7 +250,8 @@ const Product = () => {
               >
                 <Box
                   width={450}
-                  height={630}
+                  height={700}
+                  sx={{ scrollBehavior: "auto" }}
                   bgcolor={"background.default"}
                   color={"text.primary"}
                   p={3}
@@ -245,8 +317,8 @@ const Product = () => {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value={'22k'}>22k</MenuItem>
-                      <MenuItem value={'24k'}>24k</MenuItem>
+                      <MenuItem value={"22k"}>22k</MenuItem>
+                      <MenuItem value={"24k"}>24k</MenuItem>
                     </Select>
                   </FormControl>
                   <TextField
@@ -358,6 +430,194 @@ const Product = () => {
               </StyledModal>
             </Box>
             <Box></Box>
+            <Box>
+              <StyledModal
+                open={editopen}
+                onClose={(e) => setEditopen(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box
+                  width={450}
+                  height={700}
+                  sx={{ scrollBehavior: "auto" }}
+                  bgcolor={"background.default"}
+                  color={"text.primary"}
+                  p={3}
+                  borderRadius={5}
+                >
+                  <Typography
+                    variant="h6"
+                    color="gray"
+                    textAlign="center"
+                    marginBottom={3}
+                  >
+                    Edit product
+                  </Typography>
+
+                  <TextField
+                    type="text"
+                    fullWidth
+                    name="name"
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="Name of the Product"
+                    variant="outlined"
+                    value={editFormik.values.name}
+                    error={editFormik.errors.name}
+                    helperText={editFormik.errors.name}
+                    onChange={editFormik.handleChange}
+                  />
+                  <FormControl sx={{ m: 1, minWidth: 110 }}>
+                    <InputLabel id="demo-simple-select-autowidth-label">
+                      Category
+                    </InputLabel>
+                    <Select
+                      name="category"
+                      labelId="demo-simple-select-autowidth-label"
+                      id="demo-simple-select-autowidth"
+                      {...editFormik.getFieldProps("category")}
+                      autoWidth
+                      label="Category"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {collection.map((category) => (
+                        <MenuItem key={category._id} value={category._id}>
+                          {category.title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl sx={{ m: 1, minWidth: 110 }}>
+                    <InputLabel id="demo-simple-select-autowidth-label1">
+                      Product Type
+                    </InputLabel>
+                    <Select
+                      name="productType"
+                      labelId="demo-simple-select-autowidth-label1"
+                      id="demo-simple-select-autowidth1"
+                      {...editFormik.getFieldProps("productType")}
+                      autoWidth
+                      label="productType"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={"22k"}>22k</MenuItem>
+                      <MenuItem value={"24k"}>24k</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    type="text"
+                    name="description"
+                    fullWidth
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="Description of the product"
+                    variant="outlined"
+                    value={editFormik.values.description}
+                    onChange={editFormik.handleChange}
+                  />
+                  <TextField
+                    type="number"
+                    name="weight"
+                    fullWidth
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="weight of the gold"
+                    variant="outlined"
+                    value={editFormik.values.weight}
+                    error={editFormik.errors.weight}
+                    helperText={editFormik.errors.weight}
+                    onChange={editFormik.handleChange}
+                  />
+                  <TextField
+                    type="number"
+                    name="stock"
+                    fullWidth
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="Number of Stock"
+                    variant="outlined"
+                    value={editFormik.values.stock}
+                    error={editFormik.errors.stock}
+                    helperText={editFormik.errors.stock}
+                    onChange={editFormik.handleChange}
+                  />
+                  <TextField
+                    type="number"
+                    name="stoneWeight"
+                    fullWidth
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="Stone weight of the product"
+                    variant="outlined"
+                    value={editFormik.values.stoneWeight}
+                    error={editFormik.errors.stoneWeight}
+                    helperText={editFormik.errors.stoneWeight}
+                    onChange={editFormik.handleChange}
+                  />
+                  <TextField
+                    type="number"
+                    name="stonePrice"
+                    fullWidth
+                    margin="normal"
+                    size="small"
+                    sx={{ backgroundColor: "white" }}
+                    label="Stone price of the product"
+                    variant="outlined"
+                    value={editFormik.values.stonePrice}
+                    error={editFormik.errors.stonePrice}
+                    helperText={editFormik.errors.stonePrice}
+                    onChange={editFormik.handleChange}
+                  />
+                  <TextField
+                    focused
+                    required
+                    fullWidth
+                    inputProps={{
+                      multiple: true,
+                    }}
+                    margin="normal"
+                    type="file"
+                    size="small"
+                    name="file"
+                    onChange={(e) => {
+                      editFormik.setFieldValue("file", e.currentTarget.files);
+                    }}
+                    label="upload your Images"
+                    variant="outlined"
+                  />
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    marginTop={3}
+                  >
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      type="submit"
+                      name="submit"
+                      onClick={
+                        editFormik.handleSubmit
+
+                        // setOpen(false);
+                      }
+                    >
+                      Submit
+                    </Button>
+                  </Box>
+                </Box>
+              </StyledModal>
+            </Box>
             <Typography variant="h5" sx={{ marginBottom: 5, fontWeight: 500 }}>
               Product List
             </Typography>
@@ -365,87 +625,100 @@ const Product = () => {
               <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                   {product && product.length > 0 ? (
-                  <>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Product Name</TableCell>
-                        <TableCell>image</TableCell>
-                        <TableCell>product Weight</TableCell>
-                        <TableCell>Stone Weight</TableCell>
-                        <TableCell>Stone price</TableCell>
-                        <TableCell>Product Price</TableCell>
-                        <TableCell>Product Type</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Action</TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {product &&product.map((value) => (
-                      <TableRow
-                      key={value._id}
-                      >
-                        <TableCell> {value.name} </TableCell>
-                        <TableCell>
-                          <img
-                            src={value.images[0]}
-                            alt=""
-                            style={{
-                              objectFit: "cover",
-                              width: "80px",
-                              height: "80px",
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell>{value?.weight}</TableCell>
-                        <TableCell>{value?.StoneWeight}</TableCell>
-                        <TableCell>{value?.StonePrice}</TableCell>
-                        <TableCell>{value?.price}</TableCell>
-                        <TableCell>{value?.productType}</TableCell>
-                        <TableCell>
-                          <Box
-                            sx={{
-                              backgroundColor: "#6bff93",
-                              width: "90%",
-                              borderRadius: 1,
-                            }}
-                          >
-                            <Typography textAlign={"center"}>
-                              {value.isActive}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          {value.isActive === "Active" ? (
-                          <Button
-                            variant="contained"
-                            color="error"
-                            // onClick={()=>BlockHandler(value._id)}
-                          >
-                            Block
-                          </Button>
-                          ) : (
-                          <Button
-                            variant="contained"
-                            color="success"
-                            // onClick={()=>unBlockHadler(value._id)}
-                          >
-                            Unblock
-                          </Button>
-                          )}
-                        </TableCell>
-                        <TableCell onClick={()=>DeleteHandler(value._id)} sx={{cursor:'pointer'}}><DeleteIcon/></TableCell>
-                      </TableRow>
-                       ))} 
-                    </TableBody>
-                  </>
-                   ) : ( 
-                  <Box display={"flex"} justifyContent={"center"}>
-                    <Typography fontWeight={400} variant="h6">
-                      Currently there is no Products
-                    </Typography>
-                  </Box>
-                   )} 
+                    <>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Product Name</TableCell>
+                          <TableCell>image</TableCell>
+                          <TableCell>product Weight</TableCell>
+                          <TableCell>Stone Weight</TableCell>
+                          <TableCell>Stone price</TableCell>
+                          <TableCell>Stock</TableCell>
+                          <TableCell>Product Price</TableCell>
+                          <TableCell>Product Type</TableCell>
+                          <TableCell>Status</TableCell>
+                          <TableCell>Action</TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {product &&
+                          product.map((value) => (
+                            <TableRow key={value._id}>
+                              <TableCell> {value.name} </TableCell>
+                              <TableCell>
+                                <img
+                                  src={value.images[0]}
+                                  alt=""
+                                  style={{
+                                    objectFit: "cover",
+                                    width: "80px",
+                                    height: "80px",
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell>{value?.weight}</TableCell>
+                              <TableCell>{value?.StoneWeight}</TableCell>
+                              <TableCell>{value?.StonePrice}</TableCell>
+                              <TableCell>{value?.stock}</TableCell>
+                              <TableCell>{value?.price}</TableCell>
+                              <TableCell>{value?.productType}</TableCell>
+                              <TableCell>
+                                <Box
+                                  sx={{
+                                    backgroundColor: "#6bff93",
+                                    width: "90%",
+                                    borderRadius: 1,
+                                  }}
+                                >
+                                  <Typography textAlign={"center"}>
+                                    {value.isActive}
+                                  </Typography>
+                                </Box>
+                              </TableCell>
+                              <TableCell>
+                                {value.isActive === "Active" ? (
+                                  <Button
+                                    variant="contained"
+                                    color="error"
+                                    // onClick={()=>BlockHandler(value._id)}
+                                  >
+                                    Block
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    variant="contained"
+                                    color="success"
+                                    // onClick={()=>unBlockHadler(value._id)}
+                                  >
+                                    Unblock
+                                  </Button>
+                                )}
+                              </TableCell>
+                              <TableCell
+                                onClick={() => DeleteHandler(value._id)}
+                                sx={{ cursor: "pointer" }}
+                              >
+                                <DeleteIcon />
+                              </TableCell>
+                              <TableCell
+                                onClick={() => editmodalHandler(value._id)}
+                                sx={{ cursor: "pointer" }}
+                              >
+                                <EditIcon />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </>
+                  ) : (
+                    <Box display={"flex"} justifyContent={"center"}>
+                      <Typography fontWeight={400} variant="h6">
+                        Currently there is no Products
+                      </Typography>
+                    </Box>
+                  )}
                 </Table>
               </TableContainer>
             </Paper>
