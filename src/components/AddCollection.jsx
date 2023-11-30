@@ -20,6 +20,8 @@ import axios from "../axios/axios";
 import { Collection} from "../validation/CollectionSchema";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -120,6 +122,30 @@ const AddCollection = () => {
       }
     },
   });
+  const DeleteHandler = async (id) => {
+    try {
+      const response = await axios.delete(
+        "/deleteCollection",
+        {
+          params: { id },
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("admintoken"),
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getCollection()
+        // setRefresh(!refresh);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("something went wrong");
+    }
+  };
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -242,6 +268,7 @@ const AddCollection = () => {
                         <TableCell>Status</TableCell>
                         <TableCell>Action</TableCell>
                         <TableCell>Update making charge(%)</TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -367,6 +394,7 @@ const AddCollection = () => {
                                 </Box>
                               </StyledModal>
                             </TableCell>
+                            <TableCell  onClick={() => DeleteHandler(value._id)} sx={{ cursor: "pointer" }}><DeleteIcon/></TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
