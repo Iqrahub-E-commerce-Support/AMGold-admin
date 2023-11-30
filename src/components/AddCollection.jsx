@@ -204,6 +204,54 @@ const AddCollection = () => {
       }
     },
   });
+  const BlockHandler =  async (collectionId)=>{
+    try {
+      const response = await axios.post(
+        "/BlockCollection",
+        {
+          collectionId: collectionId
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("admintoken"),
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getCollection()
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  }
+  const unBlockHadler = async (collectionId)=>{
+    try {
+      const response = await axios.post(
+        "/unblockCollection",
+        {
+          collectionId: collectionId
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("admintoken"),
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getCollection()
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  }
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -435,12 +483,12 @@ const AddCollection = () => {
                                 }}
                               />
                             </TableCell>
-                            <TableCell>{/* {value?.phone} */}</TableCell>
+                            <TableCell></TableCell>
                             <TableCell>{value?.makingCharge} </TableCell>
                             <TableCell>
                               <Box
                                 sx={{
-                                  backgroundColor: "#6bff93",
+                                  backgroundColor: value.isActive === "Active" ? "#6bff93" : "#fcb8b8",
                                   width: "80%",
                                   borderRadius: 1,
                                 }}
@@ -455,7 +503,7 @@ const AddCollection = () => {
                                 <Button
                                   variant="contained"
                                   color="error"
-                                  // onClick={()=>BlockHandler(value._id)}
+                                  onClick={()=>BlockHandler(value._id)}
                                 >
                                   Block
                                 </Button>
@@ -463,7 +511,7 @@ const AddCollection = () => {
                                 <Button
                                   variant="contained"
                                   color="success"
-                                  // onClick={()=>unBlockHadler(value._id)}
+                                  onClick={()=>unBlockHadler(value._id)}
                                 >
                                   Unblock
                                 </Button>
