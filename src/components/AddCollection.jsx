@@ -40,6 +40,9 @@ const AddCollection = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [makeOpen, setMakeOpen] = useState(false);
+  const [editopen, setEditopen] = useState(false);
+  // eslint-disable-next-line
+  const [editCollection, setEditCollection] = useState(null);
   const [collection, setCollection] = useState([]);
   useEffect(()=>{
     if(!localStorage.getItem('admintoken')){
@@ -145,7 +148,62 @@ const AddCollection = () => {
     } catch (error) {
       toast.error("something went wrong");
     }
+  }
+  const editmodalHandler = async (collectionId) => {
+    try {
+      const response = await axios.get("/getSpecifiCollection", {
+        params: { collectionId },
+      });
+
+      if (response.data.success) {
+        const collectionData = response.data.data;
+        setEditCollection(collectionData);
+        setEditopen(true);
+        // getCollection();
+        const initialValues = {
+          name: collectionData.title,
+          description: collectionData.description,
+          file: null,
+        };
+        editFormik.setValues(initialValues);
+      } else {
+        console.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+  const editFormik = useFormik({
+    initialValues: {
+      name: "",
+      description: "",
+      file: null,
+    },
+    validationSchema: Collection,
+    onSubmit: async (values, helpers) => {
+      try {
+        const formData = new FormData();
+        formData.append("collectionId", editCollection._id);
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        for (let i = 0; i < values.file?.length; i++) {
+          formData.append("file", values.file[i]);
+        }
+        console.log("form data", formData);
+        const response = await axios.post("/editCollection", formData, {});
+        if (response.data.success) {
+          toast.success(response.data.message);
+          getCollection();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        helpers.setErrors({ submit: error.message });
+        toast.error("Please login");
+      }
+    },
+  });
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -251,6 +309,94 @@ const AddCollection = () => {
             </StyledModal>
           </Box>
           <Box></Box>
+          <StyledModal
+              open={editopen}
+              onClose={(e) => setEditopen(false)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                width={450}
+                height={400}
+                bgcolor={"background.default"}
+                color={"text.primary"}
+                p={3}
+                borderRadius={5}
+              >
+                <Typography
+                  variant="h6"
+                  color="gray"
+                  textAlign="center"
+                  marginBottom={3}
+                >
+                  Edit Collection
+                </Typography>
+
+                <TextField
+                  type="text"
+                  fullWidth
+                  name="name"
+                  margin="normal"
+                  size="small"
+                  sx={{ backgroundColor: "white" }}
+                  label="Title"
+                  variant="outlined"
+                  value={editFormik.values.name}
+                  error={editFormik.errors.name}
+                  helperText={editFormik.errors.name}
+                  onChange={editFormik.handleChange}
+                />
+                <TextField
+                  type="text"
+                  name="description"
+                  fullWidth
+                  margin="normal"
+                  size="small"
+                  sx={{ backgroundColor: "white" }}
+                  label="Description"
+                  variant="outlined"
+                  value={editFormik.values.description}
+                  onChange={editFormik.handleChange}
+                />
+                <TextField
+                  focused
+                  required
+                  fullWidth
+                  inputProps={{
+                    multiple: true,
+                  }}
+                  margin="normal"
+                  type="file"
+                  size="small"
+                  name="file"
+                  onChange={(e) => {
+                    editFormik.setFieldValue("file", e.currentTarget.files);
+                  }}
+                  label="upload your Images"
+                  variant="outlined"
+                />
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  marginTop={3}
+                >
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    type="submit"
+                    name="submit"
+                    onClick={
+                      editFormik.handleSubmit
+
+                      // setOpen(false);
+                    }
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </Box>
+            </StyledModal>
           <Typography variant="h5" sx={{ marginBottom: 5, fontWeight: 500 }}>
             Collection List
           </Typography>
@@ -395,6 +541,12 @@ const AddCollection = () => {
                               </StyledModal>
                             </TableCell>
                             <TableCell  onClick={() => DeleteHandler(value._id)} sx={{ cursor: "pointer" }}><DeleteIcon/></TableCell>
+                            <TableCell
+                                onClick={() => editmodalHandler(value._id)}
+                                sx={{ cursor: "pointer" }}
+                              >
+                                <EditIcon />
+                              </TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
