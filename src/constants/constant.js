@@ -1,2 +1,2 @@
-export const  baseURL = 'https://amgold-server.onrender.com'
+export const  baseURL = 'https://appserver.almuqtadirgoldwholesale.com'
 // export const  baseURL = 'http://localhost:8000'
