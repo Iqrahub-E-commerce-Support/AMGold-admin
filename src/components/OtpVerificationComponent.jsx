@@ -9,7 +9,7 @@ const OtpVerificationComponent = () => {
     const navigate =useNavigate()
     useEffect(()=>{
         if(!localStorage.getItem('userdeleteToken')){
-          navigate('/otp')
+          navigate('/deleteaccount')
         }
         // eslint-disable-next-line
       },[])

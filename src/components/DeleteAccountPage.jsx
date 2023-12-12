@@ -1,5 +1,5 @@
 import {  Box, Button, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from '../axios/axios'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,12 @@ const DeleteAccountPage = () => {
     const navigate =useNavigate()
     const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  useEffect(()=>{
+    if(localStorage.getItem('userdeleteToken')){
+      navigate('/otp')
+    }
+    // eslint-disable-next-line
+  },[])
   const handleAccountDeletion = async (e)=>{
     e.preventDefault();
     try {
