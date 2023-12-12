@@ -277,9 +277,6 @@ const Product = () => {
     <>
       <Box sx={{ display: "flex" }}>
         <AdminSidebar />
-
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <DrawerHeader />
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <DrawerHeader />
             <Box display={"flex"} justifyContent={"end"}>
@@ -773,7 +770,6 @@ const Product = () => {
               </TableContainer>
             </Paper>
           </Box>
-        </Box>
       </Box>
     </>
   );

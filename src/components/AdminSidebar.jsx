@@ -10,6 +10,7 @@ import CheckroomIcon from '@mui/icons-material/Checkroom';
 import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import { useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -211,34 +212,11 @@ const AdminSidebar = () => {
             </ListItem>
         </List>
 
-        {/* <List>
-        <ListItem 
-        // onClick={()=>{navigate("/admin_users")}}
-          disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                 {/* <PersonIcon /> */}
-                {/* </ListItemIcon> */}
-                {/* <ListItemText primary="Users" sx={{ opacity: open ? 1 : 0 }} /> */}
-              {/* </ListItemButton> */}
-            {/* </ListItem> */}
-        {/* </List> */} 
+      
 
-        {/* <List>
+        <List>
         <ListItem 
-        // onClick={()=>{navigate("/admin_pricing")}}
+        onClick={()=>{navigate("/banner")}}
           disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -254,12 +232,12 @@ const AdminSidebar = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {/* <PriceChangeIcon /> */}
-                {/* </ListItemIcon> */}
-                {/* <ListItemText primary="Plans" sx={{ opacity: open ? 1 : 0 }} /> */}
-              {/* </ListItemButton> */}
-            {/* </ListItem> */}
-        {/* </List> */}
+                  <ViewCarouselIcon /> 
+                </ListItemIcon> 
+                <ListItemText primary="Plans" sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+           </ListItem> 
+      </List>
 
         {/* <List>
         <ListItem 
