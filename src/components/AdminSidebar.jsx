@@ -11,6 +11,7 @@ import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import { useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -94,9 +95,9 @@ const AdminSidebar = () => {
       };
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex',  }}>
       <CssBaseline />
-      <AppBar sx={{backgroundColor:"#FF90AB"}} position="fixed" 
+      <AppBar sx={{backgroundColor:"#098B20"}} position="fixed" 
       open={open}
       >
         <StyledToolbar>
@@ -119,20 +120,21 @@ const AdminSidebar = () => {
           </Box>
           <Box sx={{display:'flex',justifyContent:"end",alignItems:"center"}}>
           
-          <Box sx={{marginRight:2}}>
-          {/* <Badge badgeContent={admin&& admin.notification? admin.notification.length:null} color="primary">
+          {/* <Box sx={{marginRight:2}}>
+          <Badge badgeContent={admin&& admin.notification? admin.notification.length:null} color="primary">
          <Link to={"/admin_notification"}> <NotificationsIcon sx={{color:'white'}}/> </Link>
-            </Badge> */}
+            </Badge>
             
-          </Box>
+          </Box> */}
 
           </Box>
         </StyledToolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent" open={open} >
+        <Box sx={{ backgroundImage: 'linear-gradient(to bottom, #023611, #046B15,#098B20)',height:'100%'}}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon sx={{color:'#ffffff'}}/>}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -146,6 +148,8 @@ const AdminSidebar = () => {
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  color:'#ffffff',
+                
                 }}
               >
                 <ListItemIcon
@@ -153,11 +157,12 @@ const AdminSidebar = () => {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color:'#ffffff'
                   }}
                 >
                  <DashboardIcon />
                 </ListItemIcon>
-                <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0, }} />
               </ListItemButton>
             </ListItem>
         </List>
@@ -171,6 +176,7 @@ const AdminSidebar = () => {
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  color:'#ffffff',
                 }}
               >
                 <ListItemIcon
@@ -178,6 +184,7 @@ const AdminSidebar = () => {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color:'#ffffff',
                   }}
                 >
                  <CategoryIcon />
@@ -186,7 +193,6 @@ const AdminSidebar = () => {
               </ListItemButton>
             </ListItem>
         </List>
-
         <List>
         <ListItem 
         onClick={()=>{navigate("/product")}}
@@ -196,6 +202,7 @@ const AdminSidebar = () => {
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  color:'#ffffff',
                 }}
               >
                 <ListItemIcon
@@ -203,6 +210,7 @@ const AdminSidebar = () => {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color:'#ffffff',
                   }}
                 >
                  <CheckroomIcon />
@@ -211,9 +219,7 @@ const AdminSidebar = () => {
               </ListItemButton>
             </ListItem>
         </List>
-
-      
-
+        
         <List>
         <ListItem 
         onClick={()=>{navigate("/banner")}}
@@ -223,6 +229,7 @@ const AdminSidebar = () => {
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  color:'#ffffff',
                 }}
               >
                 <ListItemIcon
@@ -230,14 +237,78 @@ const AdminSidebar = () => {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color:'#ffffff',
                   }}
                 >
                   <ViewCarouselIcon /> 
                 </ListItemIcon> 
-                <ListItemText primary="Plans" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Banners" sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+           </ListItem> 
+    
+      </List>
+      <List>
+      <ListItem 
+        onClick={()=>{navigate("/orders")}}
+          disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  color:'#ffffff',
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    color:'#ffffff',
+                  }}
+                >
+                  <LocalShippingIcon /> 
+                </ListItemIcon> 
+                <ListItemText primary="Orders" sx={{ opacity: open ? 1 : 0 }} />
           </ListItemButton>
            </ListItem> 
       </List>
+      <List>
+        <ListItem 
+        onClick={handleLogout}
+          disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  color:'#ffffff',
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    color:'#ffffff',
+                  }}
+                >
+                 <ExitToAppIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+        </List>
+        </Box>
+       
+
+       
+     
+
+       
+
+      
+
 
         {/* <List>
         <ListItem 
@@ -263,30 +334,7 @@ const AdminSidebar = () => {
               </ListItemButton> */}
             {/* </ListItem> */}
         {/* </List> */} 
-        <List>
-        <ListItem 
-        onClick={handleLogout}
-          disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                 <ExitToAppIcon/>
-                </ListItemIcon>
-                <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-        </List>
+      
       </Drawer>
      
     </Box>

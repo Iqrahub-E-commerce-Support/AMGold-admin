@@ -20,7 +20,7 @@ const Dashboard = () => {
   })
   return (
     <>
-     <Box sx={{ display: 'flex' }}>
+     <Box sx={{ display: 'flex',height: '100vh', backgroundColor: '#098B20' }}>
       <AdminSidebar />
       
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

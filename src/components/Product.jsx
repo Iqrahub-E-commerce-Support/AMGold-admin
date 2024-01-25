@@ -47,6 +47,7 @@ const Product = () => {
   const [editProduct, setEditProduct] = useState(null);
   const [collection, setCollection] = useState([]);
   const [product, setProduct] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     if (!localStorage.getItem("admintoken")) {
       navigate("/login");
@@ -69,6 +70,14 @@ const Product = () => {
   useEffect(() => {
     getProducts();
   }, []);
+  const filterProduct = (data) => {
+    return data.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.weight.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.productType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.isActive.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
   const getCollection = async () => {
     try {
       const response = await axios.get("/getCollection", {
@@ -275,7 +284,7 @@ const Product = () => {
   }
   return (
     <>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex",height: '120vh', backgroundColor: '#098B20' }}>
         <AdminSidebar />
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <DrawerHeader />
@@ -283,7 +292,7 @@ const Product = () => {
               <Button
                 onClick={() => modalHandler()}
                 variant="contained"
-                sx={{ backgroundColor: "white", color: "#FF90AB" }}
+                sx={{ backgroundColor: "white", color: "#000000" }}
               >
                 Add a Product
               </Button>
@@ -663,9 +672,21 @@ const Product = () => {
                 </Box>
               </StyledModal>
             </Box>
-            <Typography variant="h5" sx={{ marginBottom: 5, fontWeight: 500 }}>
+            <Typography variant="h5" sx={{ marginBottom: 5, fontWeight: 600,color:'#ffffff', }}>
               Product List
             </Typography>
+            <TextField
+            type="text"
+            fullWidth
+            margin="normal"
+            size="small"
+            placeholder="Search Based on name,weight & product type"
+            sx={{ backgroundColor: "white", marginBottom: 2 }}
+            label="Search"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)} // Step 4
+          />
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
@@ -689,7 +710,7 @@ const Product = () => {
                       </TableHead>
                       <TableBody>
                         {product &&
-                          product.map((value) => (
+                         filterProduct(product).map((value) => (
                             <TableRow key={value._id}>
                               <TableCell> {value.name} </TableCell>
                               <TableCell>

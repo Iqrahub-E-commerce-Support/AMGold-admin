@@ -73,7 +73,7 @@ const Banner = () => {
       });
   return (
    <>
-   <Box sx={{ display: 'flex' }}>
+   <Box sx={{ display: 'flex',height: '110vh', backgroundColor: '#098B20' }}>
       <AdminSidebar />
       
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -82,7 +82,7 @@ const Banner = () => {
               <Button
                 onClick={() => modalHandler()}
                 variant="contained"
-                sx={{ backgroundColor: "white", color: "#FF90AB" }}
+                sx={{ backgroundColor: "white", color: "#000000" }}
               >
                 Add a Banner
               </Button>
@@ -149,10 +149,11 @@ const Banner = () => {
                 </Box>
               </StyledModal>
             </Box>
-       <Typography variant="h5" sx={{ marginBottom: 5, fontWeight: 500 }}>
-              Product List
+       <Typography variant="h5" sx={{ marginBottom: 5, fontWeight: 600,color:'#ffffff' }}>
+              Banner List
             </Typography>
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            <Box sx={{paddingBottom:5}}>
+            <Paper sx={{ width: "100%", overflow: "hidden", }}>
               <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                   {banner && banner?.length > 0 ? (
@@ -236,13 +237,15 @@ const Banner = () => {
                  ) : (  
                     <Box display={"flex"} justifyContent={"center"}>
                       <Typography fontWeight={400} variant="h6">
-                        Currently there is no Products
+                        Currently there is no Banners
                       </Typography>
                     </Box>
                  )}  
                 </Table>
               </TableContainer>
             </Paper>
+            </Box>
+           
       </Box>
       </Box> 
    </>
