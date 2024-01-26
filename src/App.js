@@ -5,6 +5,11 @@ import ProductPage from "./pages/ProductPage";
 import DashboardPage from "./pages/DashboardPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import { Toaster } from "react-hot-toast";
+import Banner from "./components/Banner";
+import DeleteAccountPage from "./components/DeleteAccountPage";
+import OtpVerificationPage from "./pages/OtpVerificationPage";
+import OrderPage from "./pages/OrderPage";
+import UserPage from "./pages/UserPage";
 
 const App = () => {
   return (
@@ -16,6 +21,11 @@ const App = () => {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/collection" element={<CollectionPage />} />
           <Route path="/product" element={<ProductPage />} />
+          <Route path="/banner" element={<Banner/>} />
+          <Route path="/orders" element={<OrderPage/>} />
+          <Route path="/users" element={<UserPage/>} />
+          <Route path="/deleteaccount" element={<DeleteAccountPage/>}/>
+          <Route path="/otp" element={<OtpVerificationPage/>}/>
         </Routes>
       </BrowserRouter>
     </>
