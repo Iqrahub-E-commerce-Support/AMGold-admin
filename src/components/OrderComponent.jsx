@@ -99,6 +99,7 @@ const OrderComponent = () => {
         <AdminSidebar />
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
           <Typography
             variant="h5"
             sx={{ marginBottom: 5, fontWeight: 600, color: "#ffffff" }}
