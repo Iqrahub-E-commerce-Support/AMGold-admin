@@ -12,6 +12,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import PersonIcon from '@mui/icons-material/Person';
 import { useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -268,6 +269,32 @@ const AdminSidebar = () => {
                   }}
                 >
                   <LocalShippingIcon /> 
+                </ListItemIcon> 
+                <ListItemText primary="Orders" sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+           </ListItem> 
+      </List>
+      <List>
+      <ListItem 
+        onClick={()=>{navigate("/users")}}
+          disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  color:'#ffffff',
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    color:'#ffffff',
+                  }}
+                >
+                  <PersonIcon /> 
                 </ListItemIcon> 
                 <ListItemText primary="Orders" sx={{ opacity: open ? 1 : 0 }} />
           </ListItemButton>
