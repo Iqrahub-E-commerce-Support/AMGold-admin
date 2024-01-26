@@ -86,7 +86,7 @@ const UserComponent = () => {
           toast.error("something went wrong");
         }
       }
-      const filterCollection = (data) => {
+      const filterUser = (data) => {
         return data.filter((item) =>
           item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -134,7 +134,7 @@ const UserComponent = () => {
                       </TableHead>
                       <TableBody>
                         {user &&
-                         filterCollection(user).map((value,index) => (
+                         filterUser(user).map((value,index) => (
                             <TableRow
                              key={value._id}
                             >

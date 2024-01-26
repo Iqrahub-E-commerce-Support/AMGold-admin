@@ -13,6 +13,7 @@ import {
   Select,
   MenuItem,
   Modal,
+  TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
@@ -37,6 +38,7 @@ const OrderComponent = () => {
   const [order, setOrder] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(""); 
   const getOrders = async () => {
     try {
       const response = await axios.get("/getAllOrder", {
@@ -81,6 +83,14 @@ const OrderComponent = () => {
       setOpen(true);
     }
   };
+  const filterOrder = (data) => {
+    return data.filter((item) =>
+      item.transactionid.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.userid.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      moment(item.date).format("Do MMMM YYYY").toLowerCase().includes(searchTerm.toLowerCase()) 
+
+    );
+  };
   return (
     <>
       <Box
@@ -89,84 +99,23 @@ const OrderComponent = () => {
         <AdminSidebar />
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <DrawerHeader />
-          {/* <Box display={"flex"} justifyContent={"end"}>
-            <Button
-              onClick={() => modalHandler()}
-              variant="contained"
-              sx={{ backgroundColor: "white", color: "#000000" }}
-            >
-              Add a Banner
-            </Button>
-            <StyledModal
-              open={open}
-              onClose={(e) => setOpen(false)}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box
-                width={450}
-                height={250}
-                sx={{ scrollBehavior: "auto" }}
-                bgcolor={"background.default"}
-                color={"text.primary"}
-                p={3}
-                borderRadius={5}
-              >
-                <Typography
-                  variant="h6"
-                  color="gray"
-                  textAlign="center"
-                  marginBottom={3}
-                >
-                  Add new Banner
-                </Typography>
-                <TextField
-                  focused
-                  required
-                  fullWidth
-                  inputProps={{
-                    multiple: true,
-                  }}
-                  margin="normal"
-                  type="file"
-                  size="small"
-                  name="file"
-                  onChange={(e) => {
-                    formik.setFieldValue("file", e.currentTarget.files);
-                  }}
-                  label="upload your Images"
-                  variant="outlined"
-                />
-                <Box
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  marginTop={3}
-                >
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    type="submit"
-                    name="submit"
-                    onClick={
-                      formik.handleSubmit
-
-                      // setOpen(false);
-                    }
-                  >
-                    Submit
-                  </Button>
-                </Box>
-              </Box>
-            </StyledModal>
-          </Box> */}
           <Typography
             variant="h5"
             sx={{ marginBottom: 5, fontWeight: 600, color: "#ffffff" }}
           >
             Order List
           </Typography>
+          <TextField
+            type="text"
+            fullWidth
+            margin="normal"
+            size="small"
+            sx={{ backgroundColor: "white", marginBottom: 2 }}
+            label="Search"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)} // Step 4
+          />
           <Box sx={{ paddingBottom: 5 }}>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 440 }}>
@@ -186,7 +135,7 @@ const OrderComponent = () => {
                       </TableHead>
                       <TableBody>
                         {order &&
-                          order.map((value) => (
+                          filterOrder(order).map((value) => (
                             <TableRow
                                key={value._id}
                             >
