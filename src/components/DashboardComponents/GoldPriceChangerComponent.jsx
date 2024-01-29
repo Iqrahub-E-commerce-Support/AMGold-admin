@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { PriceSchema } from "../validation/PriceSchema";
-import axios from '../axios/axios'
+import { PriceSchema } from "../../validation/PriceSchema";
+import axios from "../../axios/axios";
 import toast from "react-hot-toast";
 const StyledModal = styled(Modal)({
   display: "flex",
@@ -12,10 +12,10 @@ const StyledModal = styled(Modal)({
 });
 const GoldPriceChangerComponent = () => {
   const [open, setOpen] = useState(false);
-  const [goldprice,setGoldPrice]=useState([])
+  const [goldprice, setGoldPrice] = useState([]);
   const modalHandler = (id) => {
     setOpen(true);
-    formik.setFieldValue('id', id);
+    formik.setFieldValue("id", id);
   };
   const getGoldPrice = async () => {
     try {
@@ -42,7 +42,7 @@ const GoldPriceChangerComponent = () => {
     validationSchema: PriceSchema,
     onSubmit: async (values, helpers) => {
       try {
-        const response = await axios.post("/updateGoldPrice",{values,});
+        const response = await axios.post("/updateGoldPrice", { values });
         if (response.data.success) {
           toast.success(response.data.message);
 
@@ -61,33 +61,52 @@ const GoldPriceChangerComponent = () => {
     <>
       <Box
         sx={{
-          width: 500,
-          backgroundColor: "#cad106",
+          width: '30%',
+          height: 300,
+          backgroundColor: "#ffffff",
           px: 5,
           py: 3,
           borderRadius: 3,
-          animation: "pulse 10s linear infinite", // Adjusted duration to one minute
-          "@keyframes pulse": {
-            "0%": { opacity: 0.8, transform: "scale(1)" },
-            "25%": { opacity: 1, transform: "scale(1.1)" },
-            "50%": { opacity: 0.8, transform: "scale(1)" },
-            "75%": { opacity: 1, transform: "scale(1.1)" },
-            "100%": { opacity: 0.8, transform: "scale(1)" },
-          },
         }}
       >
         <Typography textAlign={"center"} variant="h5">
           Today's Gold Price
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 10, mt: 3 }}>
-          <Box>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 5, mt: 3 }}>
+          <Typography>22k:</Typography>
+          <Box
+            sx={{
+              borderRadius: "15px",
+              border: "1px solid rgba(0, 0, 0, 0.20)",
+              background: "#ffffff",
+              boxShadow: " 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+              paddingX:2.5,
+              paddingY:.5
+            }}
+          >
             <Typography>
-              22k: <span style={{ fontWeight: 600 }}>{goldprice[0]?.gold22k}</span> per gram
+              <span style={{ fontWeight: 600 }}>{goldprice[0]?.gold22k}</span> /
+              gram
             </Typography>
           </Box>
-          <Box>
+        </Box>
+        
+        
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 5, mt: 3 }} >
+        <Typography>24k:</Typography>
+        <Box
+            sx={{
+              borderRadius: "15px",
+              border: "1px solid rgba(0, 0, 0, 0.20)",
+              background: "#ffffff",
+              boxShadow: " 0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+              paddingX:2.5,
+              paddingY:.5
+            }}
+          >
             <Typography>
-              24k:<span style={{ fontWeight: 600 }}>{goldprice[0]?.gold24k}</span> per gram
+              <span style={{ fontWeight: 600 }}>{goldprice[0]?.gold24k}</span> /
+              gram
             </Typography>
           </Box>
         </Box>
@@ -96,9 +115,9 @@ const GoldPriceChangerComponent = () => {
             onClick={() => modalHandler(goldprice[0]?._id)}
             sx={{
               color: "#ffffff",
-              backgroundColor: "black",
+              backgroundColor: "#075107",
               transition: "0.5s",
-              ":hover": { color: "black", backgroundColor: "white" },
+              ":hover": { color: "#075107", backgroundColor: "white" },
             }}
             variant="contained"
           >

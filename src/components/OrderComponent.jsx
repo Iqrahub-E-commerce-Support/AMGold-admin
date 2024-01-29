@@ -176,7 +176,7 @@ const OrderComponent = () => {
                                   <MenuItem value="Delivered">
                                     Delivered
                                   </MenuItem>
-                                  <MenuItem value="Delivered">
+                                  <MenuItem value="Cancelled">
                                     Cancelled
                                   </MenuItem>
                                 </Select>
