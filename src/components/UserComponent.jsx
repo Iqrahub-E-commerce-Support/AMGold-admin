@@ -96,7 +96,7 @@ const UserComponent = () => {
       };
   return (
     <>
-   <Box sx={{ display: 'flex',height: '110vh', backgroundColor: '#098B20' }}>
+   <Box sx={{ display: 'flex',height: '140vh', backgroundColor: '#098B20' }}>
       <AdminSidebar />
       
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
